@@ -1,0 +1,28 @@
+services:  
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: db_example
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+        - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_example
+      SPRING_DATASOURCE_USERNAME: springuser
+      SPRING_DATASOURCE_PASSWORD: password
+  ui:
+      build:
+        context: ./ui
+        dockerfile: Dockerfile
+      ports:
+        - "3000:80"      
